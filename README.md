@@ -12,11 +12,19 @@ sdk_version: 5.49.1
 ![Python](https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white)
 ![Gradio](https://img.shields.io/badge/UI-Gradio-FF7C00?logo=gradio&logoColor=white)
 
+<p align="center">
+  <img src="assets/readme-banner.png" alt="Deep Research — agentic web research with citations and guardrails" width="92%">
+</p>
+
 **Deep Research** is a demo application that turns a research topic into a long, cited markdown report using the [OpenAI Agents SDK](https://github.com/openai/openai-agents-python), hosted web search, and a [Gradio](https://gradio.app/) interface.
 
 ---
 
 ## What it does
+
+<p align="center">
+  <img src="assets/readme-workflow.png" alt="Pipeline: guardrails, clarifying questions, web search, writing, evaluation" width="92%">
+</p>
 
 1. **Guardrails** — Length limits, basic personal-data pattern checks, and an optional model-based check that the input looks like a research request.
 2. **Clarifying questions** — Up to three optional questions to narrow scope before the main run.
