@@ -5,111 +5,69 @@ sdk: gradio
 sdk_version: 5.49.1
 ---
 
-<p align="center">
-  <img src="assets/readme-banner.png" alt="Deep Research — AI-assisted web research with guardrails and citations" width="100%">
-</p>
+# Deep Research
 
-<h1 align="center">Deep Research</h1>
+[![GitHub](https://img.shields.io/badge/GitHub-repository-181717?logo=github&logoColor=white)](https://github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white)
+![Gradio](https://img.shields.io/badge/UI-Gradio-FF7C00?logo=gradio&logoColor=white)
 
-<p align="center">
-  <strong>OpenAI Agents · Web search · Gradio UI · Citations · Guardrails</strong>
-</p>
-
-<p align="center">
-  <a href="https://github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai"><img src="https://img.shields.io/badge/GitHub-repo-181717?logo=github&logoColor=white" alt="GitHub repository"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"></a>
-  <img src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
-  <img src="https://img.shields.io/badge/UI-Gradio-FF7C00?logo=gradio&logoColor=white" alt="Gradio">
-</p>
-
-<p align="center">
-  <a href="https://github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai"><strong>Source code</strong></a>
-  ·
-  <a href="https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE"><strong>Live demo</strong></a>
-  <sub>(add your Hugging Face Space URL here when deployed)</sub>
-  ·
-  <a href="ARCHITECTURE.md">Architecture</a>
-  ·
-  <a href="https://github.com/openai/openai-agents-python">OpenAI Agents SDK</a>
-</p>
+**Deep Research** is a demo application that turns a research topic into a long, cited markdown report using the [OpenAI Agents SDK](https://github.com/openai/openai-agents-python), hosted web search, and a [Gradio](https://gradio.app/) interface.
 
 ---
 
-## Overview
+## What it does
 
-**Deep Research** is a small, production-minded demo of an agentic research assistant. You describe a topic; the system optionally asks **three clarifying questions**, runs **guardrails** (length, sensitive patterns, research-intent check), then an autonomous **manager agent** plans web searches, gathers summaries, writes a **long markdown report with numbered citations** (`[1]`, `[2]`, … and a **Sources** section), and runs an **evaluator → optimizer** loop when quality needs improvement. Optional **PDF export** and **SendGrid email** round out the workflow.
+1. **Guardrails** — Length limits, basic personal-data pattern checks, and an optional model-based check that the input looks like a research request.
+2. **Clarifying questions** — Up to three optional questions to narrow scope before the main run.
+3. **Research loop** — A manager agent plans web searches, runs search tools per query term, then merges summaries.
+4. **Writing & citations** — A writer produces markdown with numbered references (`[1]`, `[2]`, …) and a **Sources / References** section.
+5. **Quality pass** — An evaluator scores the report; an optimizer revises it when refinement is requested.
+6. **Exports** — Optional PDF download and optional email delivery via SendGrid.
 
-<p align="center">
-  <img src="assets/readme-workflow.png" alt="Pipeline: guardrails → clarifications → search → write → evaluate" width="95%">
-</p>
-
-Use this repo **as-is for learning**, as a **template for your own Space**, or fork it for experiments. **Do not put API keys in the repo** — use environment variables only ([`.env.example`](.env.example)).
-
----
-
-## Highlights
-
-| Area | What it does |
-|------|----------------|
-| **Safety & focus** | Length limits, PII-style checks, optional GPT-based “is this research?” gate |
-| **Clarifying questions** | Three targeted questions before the heavy run |
-| **Research loop** | Plan searches → run web search per term → synthesize report |
-| **Quality** | Evaluator scores the report; optimizer refines when needed |
-| **Citations** | Numbered references tied to search summaries |
-| **UX** | Streaming updates in **Gradio**; optional share link locally |
+More detail on components and flow: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
-## Screenshots
+## Requirements
 
-_Add your own screenshots here after deployment — for example a grab of your Hugging Face Space or local Gradio UI._
-
-<!-- Example (uncomment after you add files under assets/screenshots/):
-
-<p align="center">
-  <img src="assets/screenshots/ui-main.png" alt="Main UI" width="720">
-</p>
-
--->
+- Python 3.11+
+- An OpenAI API key with access to the models and tools configured in the agent modules (see `requirements.txt` and agent files).
 
 ---
 
-## Quick start (local)
-
-```bash
-pip install -r requirements.txt
-cp .env.example .env   # Windows: copy .env.example .env
-# Edit .env — set OPENAI_API_KEY at minimum
-
-python deep_research.py
-```
-
-`deep_research.py` enables **Gradio `share=True`**, so you also get a temporary **gradio.live** link for demos.
-
-**Environment:** Loads `.env` from this folder first; if this project still lives inside a parent layout, it can fall back to `../.env` for convenience.
-
----
-
-## Repository
-
-Public project: **[github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai](https://github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai)**
-
-Clone:
+## Installation
 
 ```bash
 git clone https://github.com/siva-sankari-sivakaminathan/deep_research_openai_agentic_ai.git
 cd deep_research_openai_agentic_ai
+pip install -r requirements.txt
 ```
 
-Push updates from your machine (after [`git remote`](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories) points at this repo):
+Copy `.env.example` to `.env` and set variables (see table below).
+
+---
+
+## Running locally
 
 ```bash
-git add -A
-git commit -m "Describe your change"
-git push origin main
+python deep_research.py
 ```
 
-On GitHub: **Settings → Secrets and variables → Actions** → add optional **`OPENAI_API_KEY`** if you want full guardrail intent tests in CI (see [`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
+This launches the Gradio UI in the browser. The script enables Gradio’s **share** mode so a temporary `gradio.live` URL can be generated for short-lived public access.
+
+**Alternative entrypoint:** `python app.py` (same UI without `share=True`, suitable for Hugging Face Spaces).
+
+### Environment variables
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `OPENAI_API_KEY` | Yes | Models, tools, and intent guardrail |
+| `SENDGRID_API_KEY` | No | Outbound email from the UI |
+| `SENDGRID_FROM_EMAIL` | No | Verified sender domain in SendGrid |
+| `DEFAULT_RECIPIENT_EMAIL` | No | Default recipient when none is entered in the UI |
+
+Environment loading: `.env` in the project directory is read first; if absent, the parent directory’s `.env` may be used when this project sits inside a larger checkout.
 
 ---
 
@@ -120,21 +78,26 @@ pip install -r requirements-dev.txt
 python -m pytest tests/ -v
 ```
 
-Intent-related tests are skipped unless **`OPENAI_API_KEY`** is set.
+Intent-related guardrail tests require `OPENAI_API_KEY` at runtime; otherwise they are skipped.
+
+For CI: configure `OPENAI_API_KEY` as an Actions secret if full test coverage is desired — see [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ---
 
-## Deploy (Hugging Face Spaces)
+## Deploying on Hugging Face Spaces
 
-Typical flow: create a **Gradio** Space, copy these files to the Space repo root (`app.py`, `deep_research.py`, agents, `requirements.txt`, etc.), then push. Configure **`OPENAI_API_KEY`** (and optional SendGrid vars) in Space secrets.
+1. Create a **Gradio** Space.
+2. Copy the repository contents into the Space repository root (`app.py`, `deep_research.py`, agent modules, `guardrails.py`, `research_manager.py`, `requirements.txt`, etc.).
+3. Set secrets in the Space (minimum: `OPENAI_API_KEY`; optional SendGrid variables for email).
 
-Details: [Hugging Face Spaces — Gradio](https://huggingface.co/docs/hub/spaces-sdks-gradio).
+Reference: [Gradio on Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-sdks-gradio).
 
 ---
 
-## Security
+## Security & compliance
 
-Never commit **`.env`** or live keys. Reports may contain fetched web content — operate under your own **OpenAI usage policies** and **SendGrid** sender rules.
+- API keys belong in environment variables or platform secrets — not in git history.
+- Generated reports reflect retrieved web content; deployers remain responsible for OpenAI, SendGrid, and applicable data-handling policies.
 
 ---
 
